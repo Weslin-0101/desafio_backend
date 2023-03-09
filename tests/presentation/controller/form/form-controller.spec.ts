@@ -1,6 +1,6 @@
 import { FormController } from "@/presentation/controller/form/form-controller";
 import { EmailInUseError, ServerError } from "@/presentation/errors";
-import { forbidden, serverError } from "@/presentation/helpes";
+import { forbidden, ok, serverError } from "@/presentation/helpes";
 import { AddFormSpy } from "@/tests/presentation/mocks";
 
 const mockRequest = (): FormController.Request => {
@@ -55,5 +55,11 @@ describe("FormController", () => {
     addFormSpy.form = null;
     const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
+  });
+
+  test("Should return 200 if valid data is provided", async () => {
+    const { sut, addFormSpy } = makeSut();
+    const httpResponse = await sut.handle(mockRequest());
+    expect(httpResponse).toEqual(ok(addFormSpy.form));
   });
 });
