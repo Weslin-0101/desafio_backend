@@ -9,7 +9,10 @@ export class DbAddForm implements AddForm {
   ) {}
 
   async add(form: AddForm.Params): Promise<AddForm.Result> {
-    await this._addFormRepository.add(form);
+    const addForm = await this._addFormRepository.add(form);
+    if (!addForm) {
+      return Promise.reject(new Error());
+    }
     return null;
   }
 }
