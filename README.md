@@ -8,15 +8,15 @@
 
 #### 1.1 - digite no seu terminal o seguinte código
 
-    ```
-        git clone {link do repositório}
-    ```
+```
+    git clone {link do repositório}
+```
 
 ### 2 - Após de clonar o projeto e abrir o mesmo dentro da sua IDE, rode o comando
 
-    ```
-        npm i ou npm install
-    ```
+```
+    npm i ou npm install
+```
 
 #### OBS: o comando é para que ele baixe todos os pacotes necessários para que o projeto possa funcionar.
 
@@ -28,11 +28,11 @@
 
 ### 4 - Após ter feito todos os processos acima, você pode iniciar o projeto inserindo os seguintes comandos dentro do terminal, respectivamente:
 
-    ```
+```
     npm run build
         &
     npm run start
-    ```
+```
 
 ### OBS: O projeto vai iniciar na porta patrão adicionada dentro do arquivo **server.ts**, onde você pode ficar a vontade para mudar o número da porta.
 
