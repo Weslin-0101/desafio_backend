@@ -1,6 +1,6 @@
 import { AddForm } from "@/domain/usecases/add-form";
 import { Controller, HttpResponse } from "@/presentation/protocols";
-import { forbidden, serverError } from "@/presentation/helpes";
+import { forbidden, ok, serverError } from "@/presentation/helpes";
 import { EmailInUseError } from "@/presentation/errors";
 
 export class FormController implements Controller {
@@ -18,9 +18,7 @@ export class FormController implements Controller {
 
       if (!form) return forbidden(new EmailInUseError());
 
-      return {
-        statusCode: 200,
-      };
+      return ok(form);
     } catch (error) {
       return serverError(error);
     }
