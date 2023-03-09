@@ -1,6 +1,11 @@
 import { FormController } from "@/presentation/controller/form/form-controller";
-import { EmailInUseError, ServerError } from "@/presentation/errors";
-import { forbidden, ok, serverError } from "@/presentation/helpes";
+import {
+  EmailInUseError,
+  MissingParamError,
+  ServerError,
+} from "@/presentation/errors";
+import { badRequest, forbidden, ok, serverError } from "@/presentation/helpes";
+import { Validation } from "@/presentation/protocols";
 import { AddFormSpy } from "@/tests/presentation/mocks";
 
 const mockRequest = (): FormController.Request => {
@@ -15,14 +20,27 @@ const mockRequest = (): FormController.Request => {
 type SutTypes = {
   sut: FormController;
   addFormSpy: AddFormSpy;
+  validationSpy: ValidationSpy;
 };
+
+class ValidationSpy implements Validation {
+  error: Error = null;
+  input: any;
+
+  validate(input: any): Error {
+    this.input = input;
+    return this.error;
+  }
+}
 
 const makeSut = (): SutTypes => {
   const addFormSpy = new AddFormSpy();
-  const sut = new FormController(addFormSpy);
+  const validationSpy = new ValidationSpy();
+  const sut = new FormController(addFormSpy, validationSpy);
   return {
     sut,
     addFormSpy,
+    validationSpy,
   };
 };
 
@@ -61,5 +79,12 @@ describe("FormController", () => {
     const { sut, addFormSpy } = makeSut();
     const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(ok(addFormSpy.form));
+  });
+
+  test("Should return 400 if Validation return an error", async () => {
+    const { sut, validationSpy } = makeSut();
+    validationSpy.error = new MissingParamError("any_field");
+    const httpResponse = await sut.handle(mockRequest());
+    expect(httpResponse).toEqual(badRequest(validationSpy.error));
   });
 });
