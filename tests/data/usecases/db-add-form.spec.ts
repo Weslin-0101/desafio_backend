@@ -65,4 +65,11 @@ describe("AddForm Usecase", () => {
     const form = await sut.add(mockAddFormParams());
     expect(form).toBeNull();
   });
+
+  test("Should call CheckFormByEmailRepository with correct email", async () => {
+    const { sut, checkFormByEmailRepositorySpy } = makeSut();
+    const addFormParams = mockAddFormParams();
+    await sut.add(addFormParams);
+    expect(checkFormByEmailRepositorySpy.email).toBe(addFormParams.email);
+  });
 });
