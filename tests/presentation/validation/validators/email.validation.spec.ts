@@ -26,4 +26,11 @@ describe("Email Validation", () => {
     const error = sut.validate({ [field]: email });
     expect(error).toEqual(new InvalidParamError(field));
   });
+
+  test("Should call EmailValidator with correct email", async () => {
+    const { sut, emailValidatorSpy } = makeSut();
+    const email = "any_email@email.com";
+    sut.validate({ [field]: email });
+    expect(emailValidatorSpy.email).toBe(email);
+  });
 });
