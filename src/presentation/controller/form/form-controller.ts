@@ -1,13 +1,23 @@
 import { AddForm } from "@/domain/usecases/add-form";
 import { Controller, HttpResponse } from "@/presentation/protocols";
-import { serverError } from "@/presentation/helpes";
+import { forbidden, serverError } from "@/presentation/helpes";
+import { EmailInUseError } from "@/presentation/errors";
 
 export class FormController implements Controller {
   constructor(private readonly _addForm: AddForm) {}
 
   async handle(request: FormController.Request): Promise<HttpResponse> {
     try {
-      await this._addForm.add(request);
+      const { name, email, cpf, phone } = request;
+      const form = await this._addForm.add({
+        name,
+        email,
+        cpf,
+        phone,
+      });
+
+      if (!form) return forbidden(new EmailInUseError());
+
       return {
         statusCode: 200,
       };
