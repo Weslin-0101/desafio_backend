@@ -1,27 +1,18 @@
 import { DbAddForm } from "@/data/usecases/db-add-form";
 import { mockAddFormParams } from "@/tests/domain/mocks";
-import {
-  AddFormRepositorySpy,
-  CheckFormByEmailRepositorySpy,
-} from "@/tests/data/mocks";
+import { AddFormRepositorySpy } from "@/tests/data/mocks";
 
 type SutTypes = {
   sut: DbAddForm;
   addFormRepositorySpy: AddFormRepositorySpy;
-  checkFormByEmailRepositorySpy: CheckFormByEmailRepositorySpy;
 };
 
 const makeSut = (): SutTypes => {
   const addFormRepositorySpy = new AddFormRepositorySpy();
-  const checkFormByEmailRepositorySpy = new CheckFormByEmailRepositorySpy();
-  const sut = new DbAddForm(
-    addFormRepositorySpy,
-    checkFormByEmailRepositorySpy
-  );
+  const sut = new DbAddForm(addFormRepositorySpy);
   return {
     sut,
     addFormRepositorySpy,
-    checkFormByEmailRepositorySpy,
   };
 };
 
