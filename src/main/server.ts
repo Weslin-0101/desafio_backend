@@ -1,3 +1,4 @@
+import "module-alias/register";
 import { PrismaClient } from "@prisma/client";
 
 const PORT = 3001;
