@@ -6,5 +6,5 @@ export interface AddFormRepository {
 
 export namespace AddFormRepository {
   export type Params = AddForm.Params;
-  export type Result = boolean;
+  export type Result = AddForm.Result;
 }

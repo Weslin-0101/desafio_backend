@@ -1,14 +1,15 @@
 import { AddFormRepository } from "@/data/db/add-form-repository";
 import { AddForm } from "@/data/usecases/db-add-form.protocols";
 import { CheckFormEmailRepository } from "@/data/db/check-form-email-respository";
+import { mockAddFormModel } from "@/tests/domain/mocks";
 
 export class AddFormRepositorySpy implements AddFormRepository {
-  addFormParams: AddFormRepository.Params;
-  result = true;
+  addFormParams = mockAddFormModel();
+  params: AddForm.Params;
 
-  async add(form: AddForm.Params): Promise<boolean> {
-    this.addFormParams = form;
-    return Promise.resolve(this.result);
+  async add(form: AddForm.Params): Promise<AddForm.Result> {
+    this.params = form;
+    return Promise.resolve(this.addFormParams);
   }
 }
 

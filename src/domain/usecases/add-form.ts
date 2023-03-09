@@ -1,3 +1,5 @@
+import { FormModel } from "@/domain/model";
+
 export interface AddForm {
   add(form: AddForm.Params): Promise<AddForm.Result>;
 }
@@ -10,5 +12,5 @@ export namespace AddForm {
     phone: string;
   };
 
-  export type Result = boolean;
+  export type Result = FormModel;
 }

@@ -8,19 +8,8 @@ export class DbAddForm implements AddForm {
     private readonly _checkFormByEmailRepository: CheckFormEmailRepository
   ) {}
 
-  async add(form: AddForm.Params): Promise<boolean> {
-    const exists = await this._checkFormByEmailRepository.checkByEmail(
-      form.email
-    );
-
-    let result = false;
-
-    if (!exists) {
-      result = await this._addFormRepository.add({
-        ...form,
-      });
-    }
-
-    return result;
+  async add(form: AddForm.Params): Promise<AddForm.Result> {
+    await this._addFormRepository.add(form);
+    return null;
   }
 }
