@@ -4,7 +4,13 @@ import {
   MissingParamError,
   ServerError,
 } from "@/presentation/errors";
-import { badRequest, forbidden, ok, serverError } from "@/presentation/helpes";
+import {
+  badRequest,
+  forbidden,
+  ok,
+  serverError,
+  throwError,
+} from "@/presentation/helpes";
 import { Validation } from "@/presentation/protocols";
 import { AddFormSpy } from "@/tests/presentation/mocks";
 
@@ -42,10 +48,6 @@ const makeSut = (): SutTypes => {
     addFormSpy,
     validationSpy,
   };
-};
-
-const throwError = (): never => {
-  throw new Error();
 };
 
 describe("FormController", () => {

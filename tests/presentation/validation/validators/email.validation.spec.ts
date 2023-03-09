@@ -1,6 +1,7 @@
 import { InvalidParamError } from "@/presentation/errors";
 import { EmailValidatorSpy } from "@/tests/presentation/validation/mocks";
 import { EmailValidation } from "@/presentation/validation/validators/email-validation";
+import { throwError } from "@/presentation/helpes";
 
 type SutTypes = {
   sut: EmailValidation;
@@ -32,5 +33,11 @@ describe("Email Validation", () => {
     const email = "any_email@email.com";
     sut.validate({ [field]: email });
     expect(emailValidatorSpy.email).toBe(email);
+  });
+
+  test("Should throw if EmailValidor throws", async () => {
+    const { sut, emailValidatorSpy } = makeSut();
+    jest.spyOn(emailValidatorSpy, "isValid").mockImplementationOnce(throwError);
+    expect(sut.validate).toThrow();
   });
 });
