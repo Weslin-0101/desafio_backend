@@ -1,27 +1,24 @@
 import { DbAddForm } from "@/data/usecases/db-add-form";
-import { AddFormRepository } from "../db/add-form-repository";
-import { AddForm } from "./db-add-form.protocols";
+import { mockAddFormParams } from "@/tests/domain/mocks";
+import { AddFormRepositorySpy } from "@/tests/data/mocks";
 
-const mockAddFormParams = (): AddForm.Params => ({
-  name: "any_name",
-  email: "any_email@email.com",
-  cpf: "any_cpf",
-  phone: "any_phone",
-});
+type SutTypes = {
+  sut: DbAddForm;
+  addFormRepositorySpy: AddFormRepositorySpy;
+};
 
-class AddFormRepositorySpy implements AddFormRepository {
-  addFormParams: AddFormRepository.Params;
-
-  async add(form: AddForm.Params): Promise<boolean> {
-    this.addFormParams = form;
-    return true;
-  }
-}
+const makeSut = (): SutTypes => {
+  const addFormRepositorySpy = new AddFormRepositorySpy();
+  const sut = new DbAddForm(addFormRepositorySpy);
+  return {
+    sut,
+    addFormRepositorySpy,
+  };
+};
 
 describe("AddForm Usecase", () => {
   test("Should call AddFormRepository with correct values", async () => {
-    const addFormRepositorySpy = new AddFormRepositorySpy();
-    const sut = new DbAddForm(addFormRepositorySpy);
+    const { sut, addFormRepositorySpy } = makeSut();
     const addFormParams = mockAddFormParams();
     await sut.add(addFormParams);
     expect(addFormRepositorySpy.addFormParams).toEqual({
