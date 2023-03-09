@@ -1,20 +1,31 @@
 import "module-alias/register";
+import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { cors, bodyParse, contentType } from "@/main/middlewares";
+import routes from "@/main/routes/form-routes";
 
 const PORT = 3001;
 const prisma = new PrismaClient();
 
-prisma
-  .$connect()
-  .then(async () => {
-    const { setupApp } = await import("./config/app");
-    const app = await setupApp();
-    app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
-    });
-  })
-  .catch(async (e) => {
-    console.error(e);
+const app = express();
+app.use(cors);
+app.use(bodyParse);
+app.use(contentType);
+
+app.use(routes);
+
+const server = app.listen(PORT, () => {
+  prisma
+    .$connect()
+    .then(() => console.log(`Server running at http://localhost:${PORT}`));
+});
+
+process.on("SIGINT", async () => {
+  try {
     await prisma.$disconnect();
-    process.exit(1);
-  });
+    server.close();
+    console.log("Server closed");
+  } catch (error) {
+    console.error(`Error closing server: `, error);
+  }
+});
