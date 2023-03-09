@@ -1,7 +1,6 @@
 import { AddForm } from "@/domain/usecases/add-form";
-import { throws } from "assert";
-import { AddFormRepository } from "../db/add-form-repository";
-import { CheckFormEmailRepository } from "../db/check-form-email-respository";
+import { AddFormRepository } from "@/data/db/add-form-repository";
+import { CheckFormEmailRepository } from "@/data/db/check-form-email-respository";
 
 export class DbAddForm implements AddForm {
   constructor(
