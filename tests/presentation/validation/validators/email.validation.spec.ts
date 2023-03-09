@@ -1,4 +1,4 @@
-import { InvalidParamError } from "@/presentation/errors";
+import { EmailInUseError } from "@/presentation/errors";
 import { EmailValidatorSpy } from "@/tests/presentation/validation/mocks";
 import { EmailValidation } from "@/presentation/validation/validators/email-validation";
 import { throwError } from "@/presentation/helpes";
@@ -25,7 +25,7 @@ describe("Email Validation", () => {
     emailValidatorSpy.isEmailValid = false;
     const email = "any_email@email.com";
     const error = sut.validate({ [field]: email });
-    expect(error).toEqual(new InvalidParamError(field));
+    expect(error).toEqual(new EmailInUseError());
   });
 
   test("Should call EmailValidator with correct email", async () => {
