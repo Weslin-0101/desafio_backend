@@ -1,23 +1,15 @@
 import { DbAddForm } from "@/data/usecases/db-add-form";
 import { mockAddFormParams } from "@/tests/domain/mocks";
-import { AddFormRepositorySpy } from "@/tests/data/mocks";
-import { CheckFormEmailRepository } from "../db/check-form-email-respository";
+import {
+  AddFormRepositorySpy,
+  CheckFormByEmailRepositorySpy,
+} from "@/tests/data/mocks";
 
 type SutTypes = {
   sut: DbAddForm;
   addFormRepositorySpy: AddFormRepositorySpy;
   checkFormByEmailRepositorySpy: CheckFormByEmailRepositorySpy;
 };
-
-class CheckFormByEmailRepositorySpy implements CheckFormEmailRepository {
-  email: string;
-  result = false;
-
-  async checkByEmail(email: string): Promise<boolean> {
-    this.email = email;
-    return Promise.resolve(this.result);
-  }
-}
 
 const makeSut = (): SutTypes => {
   const addFormRepositorySpy = new AddFormRepositorySpy();
