@@ -1,16 +1,5 @@
-import { AddForm } from "@/domain/usecases/add-form";
-import { mockAddFormModel } from "@/tests/domain/mocks";
 import { FormController } from "@/presentation/controller/form/form-controller";
-
-class AddFormSpy implements AddForm {
-  form = mockAddFormModel();
-  addFormParams: AddForm.Params;
-
-  async add(form: AddForm.Params): Promise<AddForm.Result> {
-    this.addFormParams = form;
-    return Promise.resolve(this.form);
-  }
-}
+import { AddFormSpy } from "@/tests/presentation/mocks";
 
 const mockRequest = (): FormController.Request => {
   return {
@@ -21,10 +10,23 @@ const mockRequest = (): FormController.Request => {
   };
 };
 
+type SutTypes = {
+  sut: FormController;
+  addFormSpy: AddFormSpy;
+};
+
+const makeSut = (): SutTypes => {
+  const addFormSpy = new AddFormSpy();
+  const sut = new FormController(addFormSpy);
+  return {
+    sut,
+    addFormSpy,
+  };
+};
+
 describe("FormController", () => {
   test("Should call AddForm with correct values", async () => {
-    const addFormSpy = new AddFormSpy();
-    const sut = new FormController(addFormSpy);
+    const { sut, addFormSpy } = makeSut();
     const request = mockRequest();
     await sut.handle(request);
     expect(addFormSpy.addFormParams).toEqual({
