@@ -1,4 +1,6 @@
 import { FormController } from "@/presentation/controller/form/form-controller";
+import { ServerError } from "@/presentation/errors";
+import { serverError } from "@/presentation/helpes";
 import { AddFormSpy } from "@/tests/presentation/mocks";
 
 const mockRequest = (): FormController.Request => {
@@ -24,6 +26,10 @@ const makeSut = (): SutTypes => {
   };
 };
 
+const throwError = (): never => {
+  throw new Error();
+};
+
 describe("FormController", () => {
   test("Should call AddForm with correct values", async () => {
     const { sut, addFormSpy } = makeSut();
@@ -35,5 +41,12 @@ describe("FormController", () => {
       cpf: request.cpf,
       phone: request.phone,
     });
+  });
+
+  test("Should return 500 if AddForm throws", async () => {
+    const { sut, addFormSpy } = makeSut();
+    jest.spyOn(addFormSpy, "add").mockImplementationOnce(throwError);
+    const httpResponse = await sut.handle(mockRequest());
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 });
