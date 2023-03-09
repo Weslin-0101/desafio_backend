@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { setupApp } from "./config/app";
 
 const PORT = 3001;
 const prisma = new PrismaClient();
@@ -7,6 +6,7 @@ const prisma = new PrismaClient();
 prisma
   .$connect()
   .then(async () => {
+    const { setupApp } = await import("./config/app");
     const app = await setupApp();
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
