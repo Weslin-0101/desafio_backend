@@ -3,9 +3,10 @@ import { AddForm } from "@/data/usecases/db-add-form.protocols";
 
 export class AddFormRepositorySpy implements AddFormRepository {
   addFormParams: AddFormRepository.Params;
+  result = true;
 
   async add(form: AddForm.Params): Promise<boolean> {
     this.addFormParams = form;
-    return true;
+    return Promise.resolve(this.result);
   }
 }
