@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:dev": "npm run build && docker-compose up",
     "build": "rimraf disc && tsc -p tsconfig-build.json",
     "test": "jest --passWithNoTests --silent --runInBand",
     "test:watch": "npm test -- --watch",
