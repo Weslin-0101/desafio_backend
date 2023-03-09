@@ -87,4 +87,11 @@ describe("FormController", () => {
     const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(badRequest(validationSpy.error));
   });
+
+  test("Should call Validation with correct value", async () => {
+    const { sut, validationSpy } = makeSut();
+    const request = mockRequest();
+    await sut.handle(request);
+    expect(validationSpy.input).toEqual(request);
+  });
 });
