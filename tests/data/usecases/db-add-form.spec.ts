@@ -1,18 +1,35 @@
 import { DbAddForm } from "@/data/usecases/db-add-form";
 import { mockAddFormParams } from "@/tests/domain/mocks";
 import { AddFormRepositorySpy } from "@/tests/data/mocks";
+import { CheckFormEmailRepository } from "../db/check-form-email-respository";
 
 type SutTypes = {
   sut: DbAddForm;
   addFormRepositorySpy: AddFormRepositorySpy;
+  checkFormByEmailRepositorySpy: CheckFormByEmailRepositorySpy;
 };
+
+class CheckFormByEmailRepositorySpy implements CheckFormEmailRepository {
+  email: string;
+  result = false;
+
+  async checkByEmail(email: string): Promise<boolean> {
+    this.email = email;
+    return Promise.resolve(this.result);
+  }
+}
 
 const makeSut = (): SutTypes => {
   const addFormRepositorySpy = new AddFormRepositorySpy();
-  const sut = new DbAddForm(addFormRepositorySpy);
+  const checkFormByEmailRepositorySpy = new CheckFormByEmailRepositorySpy();
+  const sut = new DbAddForm(
+    addFormRepositorySpy,
+    checkFormByEmailRepositorySpy
+  );
   return {
     sut,
     addFormRepositorySpy,
+    checkFormByEmailRepositorySpy,
   };
 };
 
@@ -47,6 +64,13 @@ describe("AddForm Usecase", () => {
   test("Should return false if AddFormRepository returns false", async () => {
     const { sut, addFormRepositorySpy } = makeSut();
     addFormRepositorySpy.result = false;
+    const isValid = await sut.add(mockAddFormParams());
+    expect(isValid).toBe(false);
+  });
+
+  test("Should return false if CheckFormByEmailRepository returns true", async () => {
+    const { sut, checkFormByEmailRepositorySpy } = makeSut();
+    checkFormByEmailRepositorySpy.result = true;
     const isValid = await sut.add(mockAddFormParams());
     expect(isValid).toBe(false);
   });
