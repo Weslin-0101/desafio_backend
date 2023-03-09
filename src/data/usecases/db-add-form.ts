@@ -13,6 +13,6 @@ export class DbAddForm implements AddForm {
     if (!addForm) {
       return Promise.reject(new Error());
     }
-    return null;
+    return addForm;
   }
 }
