@@ -43,4 +43,11 @@ describe("AddForm Usecase", () => {
     const isValid = await sut.add(mockAddFormParams());
     expect(isValid).toBe(true);
   });
+
+  test("Should return false if AddFormRepository returns false", async () => {
+    const { sut, addFormRepositorySpy } = makeSut();
+    addFormRepositorySpy.result = false;
+    const isValid = await sut.add(mockAddFormParams());
+    expect(isValid).toBe(false);
+  });
 });
