@@ -1,18 +1,27 @@
 import { DbAddForm } from "@/data/usecases/db-add-form";
 import { mockAddFormParams } from "@/tests/domain/mocks";
-import { AddFormRepositorySpy } from "@/tests/data/mocks";
+import {
+  AddFormRepositorySpy,
+  CheckFormByEmailRepositorySpy,
+} from "@/tests/data/mocks";
 
 type SutTypes = {
   sut: DbAddForm;
   addFormRepositorySpy: AddFormRepositorySpy;
+  checkFormByEmailRepositorySpy: CheckFormByEmailRepositorySpy;
 };
 
 const makeSut = (): SutTypes => {
   const addFormRepositorySpy = new AddFormRepositorySpy();
-  const sut = new DbAddForm(addFormRepositorySpy);
+  const checkFormByEmailRepositorySpy = new CheckFormByEmailRepositorySpy();
+  const sut = new DbAddForm(
+    addFormRepositorySpy,
+    checkFormByEmailRepositorySpy
+  );
   return {
     sut,
     addFormRepositorySpy,
+    checkFormByEmailRepositorySpy,
   };
 };
 
@@ -48,5 +57,12 @@ describe("AddForm Usecase", () => {
       cpf: "any_cpf",
       phone: "any_phone",
     });
+  });
+
+  test("Should return null if CheckFormByEmailRepository returns true", async () => {
+    const { sut, checkFormByEmailRepositorySpy } = makeSut();
+    checkFormByEmailRepositorySpy.result = true;
+    const form = await sut.add(mockAddFormParams());
+    expect(form).toBeNull();
   });
 });
