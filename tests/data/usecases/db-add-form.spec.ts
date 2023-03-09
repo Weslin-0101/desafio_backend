@@ -46,4 +46,16 @@ describe("AddForm Usecase", () => {
     const promise = sut.add(mockAddFormParams());
     expect(promise).rejects.toThrow();
   });
+
+  test("Should return a form on success", async () => {
+    const { sut } = makeSut();
+    const form = await sut.add(mockAddFormParams());
+    expect(form).toEqual({
+      id: "any_id",
+      name: "any_name",
+      email: "any_email@email.com",
+      cpf: "any_cpf",
+      phone: "any_phone",
+    });
+  });
 });
