@@ -1,6 +1,6 @@
 import { FormController } from "@/presentation/controller/form/form-controller";
-import { ServerError } from "@/presentation/errors";
-import { serverError } from "@/presentation/helpes";
+import { EmailInUseError, ServerError } from "@/presentation/errors";
+import { forbidden, serverError } from "@/presentation/helpes";
 import { AddFormSpy } from "@/tests/presentation/mocks";
 
 const mockRequest = (): FormController.Request => {
@@ -48,5 +48,12 @@ describe("FormController", () => {
     jest.spyOn(addFormSpy, "add").mockImplementationOnce(throwError);
     const httpResponse = await sut.handle(mockRequest());
     expect(httpResponse).toEqual(serverError(new ServerError(null)));
+  });
+
+  test("Should return 403 if AddForm returns null", async () => {
+    const { sut, addFormSpy } = makeSut();
+    addFormSpy.form = null;
+    const httpResponse = await sut.handle(mockRequest());
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
   });
 });
